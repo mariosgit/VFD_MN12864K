@@ -1,3 +1,5 @@
+#if 0
+
 /// A GFX 1-bit canvas context for graphics
 
 /// double buffer:
@@ -248,3 +250,5 @@ void MN12864K::displayRefresh()
     // nextGate(65);
     displayTime = micros() - time;;
 }
+
+#endif
