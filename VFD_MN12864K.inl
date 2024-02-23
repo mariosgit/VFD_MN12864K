@@ -1,6 +1,6 @@
 /// A GFX 1-bit canvas context for graphics
 
-// #include <mbLog.h>
+#include <mbLog.h>
 
 
 // moved out for more compability with other platforms
@@ -20,8 +20,8 @@ MN12864Kgeneric<BitDepth>::MN12864Kgeneric(
     byte pinLAT,
     byte pinGBLK,
     byte pinPWM,
-    byte MOSI_PIN,
-    byte SCLK_PIN
+    byte pinMOSI,
+    byte pinSCLK
     ) : Adafruit_GFX(128, 64),
                    spiSettings(4000000, MSBFIRST, SPI_MODE0),
                    gate(50),
@@ -30,8 +30,8 @@ MN12864Kgeneric<BitDepth>::MN12864Kgeneric(
                    pinLAT(pinLAT),
                    pinGBLK(pinGBLK),
                    pinPWM(pinPWM),
-                   MOSI_PIN(MOSI_PIN),
-                   SCLK_PIN(SCLK_PIN)
+                   pinMOSI(pinMOSI),
+                   pinSCLK(pinSCLK)
 {
     _the = this;
 }
@@ -52,11 +52,11 @@ void MN12864Kgeneric<BitDepth>::begin()
     digitalWrite(pinLAT, LOW);
     digitalWrite(pinGBLK, LOW);
 
-    SPI.setMOSI(MOSI_PIN);
+    SPI.setMOSI(pinMOSI);
 #ifdef ARDUINO_ARCH_STM32 // aaahhhh :(
     SPI.setSCLK(SCLK_PIN);
 #else
-    SPI.setSCK(SCLK_PIN);
+    SPI.setSCK(pinSCLK);
 #endif
     SPI.begin();
 
@@ -274,7 +274,7 @@ void MN12864Kgeneric<BitDepth>::refresh()
 
     for(size_t i = 0; i < BitDepth; i++)
     {
-        uint8_t *ptr = (buffer + bufferSize*i + 24 * (_the->gate/2 + 0));
+        uint8_t *ptr = (buffer + bufferSize*i + 48 * (_the->gate/2 + 0));
 
         uint8_t *dst = _the->tempBuffer;
 

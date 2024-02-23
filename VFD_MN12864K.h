@@ -32,8 +32,8 @@ public:
         byte pinLAT = 16,
         byte pinGBLK = 15,
         byte pinPWM = 17,
-        byte MOSI_PIN = 11,
-        byte SCLK_PIN = 13
+        byte pinMOSI = 11,
+        byte pinSCLK = 13
         );
     ~MN12864Kgeneric(void);
     void begin();
@@ -48,7 +48,7 @@ public:
     /** must be called from timer or otherwise very regularly ! Go for min 4000 times per sec */
     static void refresh();
 
-    static const int16_t targetFps = 22;//150 * 44; // this is per gate // 
+    static const int16_t targetFps = 150 * 44; // this is per gate // 
 
 protected:
     static void nextGate();
@@ -90,8 +90,8 @@ protected:
     const byte pinLAT;
     const byte pinGBLK;
     const byte pinPWM;    
-    const byte MOSI_PIN;
-    const byte SCLK_PIN;
+    const byte pinMOSI;
+    const byte pinSCLK;
     static MN12864Kgeneric *_the;
 };
 
@@ -105,12 +105,12 @@ class MN12864K : public MN12864Kgeneric<1>
 {
 public:
     MN12864K(
-        byte pinBLK = 4,
-        byte pinLAT = 6,
-        byte pinGBLK = 3,
-        byte MOSI_PIN = 11,
-        byte SCK_PIN = 13,
-        byte pinPWM = 20);
+        byte pinBLK = 14,
+        byte pinLAT = 16,
+        byte pinGBLK = 15,
+        byte pinPWM = 17,
+        byte pinMOSI = 11,
+        byte pinSCLK = 13);
 };
 
 #include "VFD_MN12864K.inl"

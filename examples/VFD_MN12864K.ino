@@ -39,7 +39,7 @@ void loop()
         checker = 0;
         uint32_t time = micros();
 
-#define DRAWBEBUG 1
+// #define DRAWBEBUG 1
 #ifdef DRAWBEBUG
 
         const uint16_t fullCol = 1;
@@ -47,10 +47,8 @@ void loop()
         // v1 ~ 1975us
         // v2 ~ 1223us
         display.fillScreen(0);
-        display.drawLine(0,0,31,31,fullCol);
-        display.drawLine(32,0,32+31,31,fullCol);
-        display.drawLine(64,0,64+31,31,fullCol);
-        display.drawLine(96,0,96+31,31,fullCol);
+        display.drawLine(0,0,63,63,fullCol);
+        display.drawLine(64,0,64+63,63,fullCol);
         
         // display.drawRect(1,1,4,4,1);
         // display.drawRect(7,7,4,4,1);
