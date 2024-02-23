@@ -39,7 +39,7 @@ void loop()
         checker = 0;
         uint32_t time = micros();
 
-// #define DRAWBEBUG 1
+#define DRAWBEBUG 1
 #ifdef DRAWBEBUG
 
         const uint16_t fullCol = 1;

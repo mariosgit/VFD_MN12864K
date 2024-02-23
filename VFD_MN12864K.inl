@@ -23,7 +23,7 @@ MN12864Kgeneric<BitDepth>::MN12864Kgeneric(
     byte MOSI_PIN,
     byte SCLK_PIN
     ) : Adafruit_GFX(128, 64),
-                   spiSettings(16000000, MSBFIRST, SPI_MODE0),
+                   spiSettings(4000000, MSBFIRST, SPI_MODE0),
                    gate(50),
                    displayTime(0),
                    pinBLK(pinBLK),
@@ -48,7 +48,7 @@ void MN12864Kgeneric<BitDepth>::begin()
     pinMode(pinGBLK, OUTPUT);
     pinMode(pinLAT, OUTPUT);
 
-    digitalWrite(pinBLK, HIGH);
+    digitalWrite(pinBLK, HIGH);                                                                                                                                                                                      
     digitalWrite(pinLAT, LOW);
     digitalWrite(pinGBLK, LOW);
 
@@ -92,7 +92,7 @@ void MN12864Kgeneric<BitDepth>::drawPixel(int16_t px, int16_t py, uint16_t color
 {
     if ((px < 0) || (py < 0) || (px >= _width) || (py >= _height))
         return;
-    if(color > 3)
+    if(color > 1)
         return;
 
     // mem coordinates, allways 3 bytes = 4 lines = 24 pixel in one block
@@ -122,7 +122,7 @@ void MN12864Kgeneric<BitDepth>::drawPixel(int16_t px, int16_t py, uint16_t color
 
     if(BitDepth == 1) // mono
     {
-        uint8_t *dst = buffer + bufferOffset + 24 * gate + yblk * 3;
+        uint8_t *dst = buffer + bufferOffset + 48 * gate + yblk * 3;
         if(color)
         {
             dst[0] |= (pixp.u4[2]);
@@ -140,7 +140,7 @@ void MN12864Kgeneric<BitDepth>::drawPixel(int16_t px, int16_t py, uint16_t color
     {
         if(color & 1) // bitplane 0
         {
-            uint8_t *dst = buffer + bufferOffset + 24 * gate + yblk * 3;
+            uint8_t *dst = buffer + bufferOffset + 48 * gate + yblk * 3;
             dst[0] &= ~(pixp.u4[2]);
             dst[1] &= ~(pixp.u4[1]);
             dst[2] &= ~(pixp.u4[0]);
@@ -150,7 +150,7 @@ void MN12864Kgeneric<BitDepth>::drawPixel(int16_t px, int16_t py, uint16_t color
         }
         if(color & 2) // bitplane 1
         {
-            uint8_t *dst = buffer + bufferOffset + bufferSize + 24 * gate + yblk * 3;
+            uint8_t *dst = buffer + bufferOffset + bufferSize + 48 * gate + yblk * 3;
             dst[0] &= ~(pixp.u4[2]);
             dst[1] &= ~(pixp.u4[1]);
             dst[2] &= ~(pixp.u4[0]);
@@ -277,10 +277,13 @@ void MN12864Kgeneric<BitDepth>::refresh()
         uint8_t *ptr = (buffer + bufferSize*i + 24 * (_the->gate/2 + 0));
 
         uint8_t *dst = _the->tempBuffer;
+
+        // copy 6 pixel column..
         for(int i = 0; i< 48; i++)
         {
             *dst++ = (*ptr++) & mask;
         }
+        
         // shift out gates   // bits 192-236 are the gates..
         // LOG <<"gate:" <<LOG.dec <<_the->_gate <<LOG.hex <<" gb:\t" <<_the->gateBuf <<LOG.endl;
         ptr = _the->gateBuf.u8 + 7;
@@ -303,12 +306,10 @@ void MN12864Kgeneric<BitDepth>::refresh()
         // LOG <<LOG.endl;
         SPI.endTransaction();
 
-        digitalWrite(_the->pinBLK, HIGH);
-
         digitalWrite(_the->pinLAT, HIGH);
         digitalWrite(_the->pinLAT, LOW);
 
-        digitalWrite(_the->pinBLK, LOW);
+        digitalWrite(_the->pinBLK, (_the->gate % 2 == 1));
     }
 
     nextGate();

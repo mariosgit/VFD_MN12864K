@@ -3,7 +3,12 @@
 
 ## Experimental !!!
 
-Supposed to work with STM32F1x, could be possible on Arduinos too, just check the refreshDisplay interrupt call.
+Supposed to work with TeensyLC, could be possible on Arduinos too, just check the refreshDisplay interrupt call.
+
+Todo
+* GLAT is high in the connection drawing ???
+* GBLK ???
+* resistor at VDD2
 
 ### Dependencies:
 - mbLog, stdout style serial log, can be found in mariosgit/mbLog

@@ -28,12 +28,12 @@ template <size_t BitDepth> class MN12864Kgeneric : public Adafruit_GFX
 {
 public:
     MN12864Kgeneric(
-        byte pinBLK = PB1,
-        byte pinLAT = PB0,
-        byte pinGBLK = PA2,
-        byte pinPWM = PA3,
-        byte MOSI_PIN = PIN_SPI_MOSI,
-        byte SCLK_PIN = PIN_SPI_SCK
+        byte pinBLK = 14,
+        byte pinLAT = 16,
+        byte pinGBLK = 15,
+        byte pinPWM = 17,
+        byte MOSI_PIN = 11,
+        byte SCLK_PIN = 13
         );
     ~MN12864Kgeneric(void);
     void begin();
@@ -48,7 +48,7 @@ public:
     /** must be called from timer or otherwise very regularly ! Go for min 4000 times per sec */
     static void refresh();
 
-    static const int16_t targetFps = 150 * 44; // this is per gate // 
+    static const int16_t targetFps = 22;//150 * 44; // this is per gate // 
 
 protected:
     static void nextGate();
