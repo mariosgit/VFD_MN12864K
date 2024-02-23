@@ -28,7 +28,7 @@ void setup()
     timer.setOverflow(1000000 / display.targetFps, MICROSEC_FORMAT);
     timer.attachInterrupt([](HardwareTimer *timer) { display.refresh(); });
 #else
-    timer.begin(display.refresh, 1000000 / display.targetFps); // starting slowly
+    timer.begin(display.refresh, 4000000 / display.targetFps); // starting slowly
 #endif
 }
 
@@ -47,7 +47,7 @@ void loop()
         // v1 ~ 1975us
         // v2 ~ 1223us
         display.fillScreen(0);
-        display.drawLine(0,0,63,63,fullCol);
+        display.drawLine(0,32,63,63,fullCol);
         display.drawLine(64,0,64+63,63,fullCol);
         
         // display.drawRect(1,1,4,4,1);
@@ -63,7 +63,11 @@ void loop()
         display.setTextColor(1);
         display.setTextWrap(false);
         display.print("subermajo");
-        display.print(" :-P");
+        display.print(MYEMOJI);
+
+        display.drawLine(0,54,127,54, 1);
+        display.setCursor(-textPos+40,56);
+        display.print("hypercool");
 
         textPos -= 3;
         if(textPos < -120) textPos = 128;
@@ -73,6 +77,7 @@ void loop()
             int16_t hi = random(16);
             // display.fillRect(x,16,7,31,0);
             display.fillRect(x,32 - hi, 7, hi, 1);
+            display.fillRect(x,32, 7, hi, 1);
         }
 #endif
 

@@ -1,6 +1,6 @@
 /// A GFX 1-bit canvas context for graphics
 
-#include <mbLog.h>
+// #include <mbLog.h>
 
 
 // moved out for more compability with other platforms
@@ -23,7 +23,7 @@ MN12864Kgeneric<BitDepth>::MN12864Kgeneric(
     byte pinMOSI,
     byte pinSCLK
     ) : Adafruit_GFX(128, 64),
-                   spiSettings(4000000, MSBFIRST, SPI_MODE0),
+                   spiSettings(16000000, MSBFIRST, SPI_MODE0),
                    gate(50),
                    displayTime(0),
                    pinBLK(pinBLK),
@@ -235,8 +235,8 @@ void MN12864Kgeneric<BitDepth>::nextGate()
         _the->gateBuf.u64 = 0x8000000000000000;
     if (gate == 1)
         _the->gateBuf.u64 = 0xC000000000000000;
-    // else if (gate == endstop)
-    //     _the->gateBuf = 0x8000000000100000;
+    else if (gate == endstop)
+        _the->gateBuf.u64 = 0x0000000000000000;
     else
         _the->gateBuf.u64 = _the->gateBuf.u64 >> 1;
 
@@ -306,10 +306,14 @@ void MN12864Kgeneric<BitDepth>::refresh()
         // LOG <<LOG.endl;
         SPI.endTransaction();
 
+        digitalWrite(_the->pinBLK, HIGH);
+
         digitalWrite(_the->pinLAT, HIGH);
         digitalWrite(_the->pinLAT, LOW);
 
-        digitalWrite(_the->pinBLK, (_the->gate % 2 == 1));
+        digitalWrite(_the->pinBLK, LOW);
+
+        // digitalWrite(_the->pinBLK, (_the->gate % 2 == 1));
     }
 
     nextGate();
